@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'ventura'
 ]
 
 MIDDLEWARE = [
@@ -76,8 +78,12 @@ WSGI_APPLICATION = 'ventura_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ventura_db',
+        'USER' : 'admin',
+        'PASSWORD' : 'pvtytYya7ielWxgXfUOoC0HgPicGAsfF',
+        'HOST' : 'dpg-codh4l8l5elc73fo4220-a.oregon-postgres.render.com',
+        'PORT' : '5432'
     }
 }
 
