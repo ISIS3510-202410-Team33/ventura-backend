@@ -15,9 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include 
+from django.urls import path, include
+
+from ventura import views 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('ventura.api.urls'))
+    path('', views.index, name='index'),
+    path('get_data/', views.get_data, name='get_data'),
+    path('api/', include('ventura.api.urls')),
+    path('download_top_3_edificios/', views.download_top_3_edificios, name='download_top_3_edificios')
+
 ]
