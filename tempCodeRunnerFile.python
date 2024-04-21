@@ -1,0 +1,19 @@
+import wifi
+import math
+
+def distancia_rssi(rssi, potencia):
+    # Fórmula de cálculo de distancia basada en RSSI
+    exponente = (potencia - rssi) / (10 * 2)
+    distancia = math.pow(10, exponente)
+    return distancia
+
+def escanear_redes():
+    redes_encontradas = wifi.Cell.all('wlan0')
+    for red in redes_encontradas:
+        if red.ssid == 'nombre_del_router':  # Reemplaza 'nombre_del_router' con el SSID de tu router
+            rssi = red.signal
+            distancia = distancia_rssi(rssi, red.quality)
+            print(f"Distancia estimada al router: {distancia} metros")
+
+
+escanear_redes()
