@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Get Data{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<div>
+    <h1>Get Data</h1>
+    <p>In this page you can download the data collected from our application analytics.</p>
+</div>
+
+<div style="display: flex; align-items: center;">
+    <div style="margin-right: 20px;">
+        <img src="{% static 'images/goose.png' %}" alt="Ventura Goose Draw" width="212" height="400">
+    </div>
+    
+    <div style="border: 1px solid #ccc; padding: 10px; flex-grow: 1; text-align: center;">
+        <h2 style="margin-bottom: 10px;">Download Options</h2>
+        <button onclick="window.location.href='/download_top_3_edificios/'" style="display: block; margin-bottom: 10px; width: 100%;">Get the top visited sites of the campus according to our app</button>
+        <button style="display: block; margin-bottom: 10px; width: 100%;">Download Option 2</button>
+        <button style="display: block; margin-bottom: 10px; width: 100%;">Download Option 3</button>
+        <!-- Agrega aquí más botones según sea necesario -->
+    </div>
+</div>
+{% endblock %}
