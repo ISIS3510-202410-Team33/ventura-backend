@@ -1,5 +1,5 @@
-django
-djangorestframework
-psycopg2
-django-bootstrap5
-firebase-admin
+django==5.0.4
+djangorestframework==3.15.1
+psycopg2==2.9.9
+django-bootstrap5==24.1
+firebase-admin==6.5.0
