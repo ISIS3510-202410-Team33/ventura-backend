@@ -1,4 +1,5 @@
 
+
 from django.http import JsonResponse
 from rest_framework import viewsets
 from ventura.models import College, College_location, User, User_calification, User_frequency
