@@ -44,7 +44,7 @@ class user_calificationsViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.query_params.get('user_id', None)
-        location = self.request.query_params.get('college_location_id', None)
+        location = self.request.query_params.get('location_id', None)
         if user is not None and location is not None:
             return User_calification.objects.filter(user_id=user , college_location_id=location)
         elif user is not None:
@@ -60,7 +60,7 @@ class user_frequenciesViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.query_params.get('user_id', None)
-        location = self.request.query_params.get('college_location_id', None)
+        location = self.request.query_params.get('location_id', None)
         if user is not None and location is not None:
             return User_frequency.objects.filter(user_id=user , college_location_id=location)
         elif user is not None:
