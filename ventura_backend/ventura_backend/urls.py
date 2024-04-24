@@ -22,6 +22,7 @@ from ventura import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
+    path('health-check/', views.health_check, name='health-check'),
     path('get_data/', views.get_data, name='get_data'),
     path('api/', include('ventura.api.urls')),
     path('download_top_3_edificios/', views.download_top_3_edificios, name='download_top_3_edificios'),
