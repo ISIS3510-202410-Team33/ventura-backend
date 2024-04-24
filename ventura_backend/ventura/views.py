@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import firebase_admin
@@ -33,6 +33,16 @@ firebase_credentials = {
 # Configurar las credenciales de Firebase
 cred = credentials.Certificate(firebase_credentials)
 firebase_admin.initialize_app(cred, {'storageBucket': 'gs://ventura-bfe66.appspot.com'})
+
+
+def health_check(request):
+    """
+    Health check para saber si el servicio está en línea
+    @param request petición HTTP de tipo GET con JSON
+    """
+    if request.method == "GET":
+        return HttpResponse(200)
+
 
 # Create your views here.
 def index(request):
