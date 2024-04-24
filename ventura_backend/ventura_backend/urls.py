@@ -24,6 +24,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('get_data/', views.get_data, name='get_data'),
     path('api/', include('ventura.api.urls')),
-    path('download_top_3_edificios/', views.download_top_3_edificios, name='download_top_3_edificios')
-
+    path('download_top_3_edificios/', views.download_top_3_edificios, name='download_top_3_edificios'),
+    path('download_keywords_for_edificios/', views.download_keywords_for_edificios, name='download_keywords_for_edificios')
 ]
