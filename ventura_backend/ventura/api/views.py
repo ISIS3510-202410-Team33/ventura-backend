@@ -1,6 +1,7 @@
 
 
 from django.http import JsonResponse
+from rest_framework.response import Response
 from rest_framework import viewsets
 from ventura.models import College, College_location, User, User_calification, User_frequency
 from ventura.api.serializer import CollegeSerializer, College_locationSerializer, UserSerializer, User_calificationSerializer, User_frequencySerializer
@@ -195,9 +196,44 @@ class user_frequenciesViewSet(viewsets.ModelViewSet):
             return JsonResponse(status = 200, data=serializer.data)
         # return a meaningful error response
         return JsonResponse(status = 400, data={"error": "Bad request"})
-    
 
-    
-    
+class UserFrequencyLocationAnalysisViewSet(viewsets.ModelViewSet):
+    queryset = College_location.objects.all()
+    serializer_class = College_locationSerializer
 
-        
+
+    # GET implementation for the UserFrequencyLocationAnalysisViewSet
+    # Available URLs:
+    # /api/user_frequencies/analysis/?user_id=<user_id>&method=reccommended_most_visited -> returns the list of recommended college locations based on the most visited location by the user with id <user_id>
+    # /api/user_frequencies/analysis/?method=recommended_most_visited -> returns the list of recommended college locations based on the most visited location by any user
+    # /api/user_frequencies/analysis/?method=best_rated -> returns the list of recommended college locations based on the best rated location by any user
+    # 
+    def get_queryset(self):
+        user_id = self.request.query_params.get('user_id', None)
+        method = self.request.query_params.get('method', None)
+
+        if method is not None: 
+            print(method)
+            if method == 'recommended_most_visited':
+                nameMostVisited = None
+                if user_id is not None:
+                    mostVisitedByUser = User_frequency.objects.filter(user_id=user_id).order_by('-frequency').first()
+                    if mostVisitedByUser is not None:
+                        nameMostVisited = mostVisitedByUser.college_location.name
+                else:
+                    mostVisited = User_frequency.objects.order_by('-frequency').first()
+                    if mostVisited is not None:
+                        nameMostVisited = mostVisited.college_location.name
+                if nameMostVisited is None:
+                    return College_location.objects.none()
+                print("Most visited location")
+                print(nameMostVisited)
+                return College_location.objects.filter(name__icontains=nameMostVisited)
+            if method == 'best_rated':
+                bestRated = User_calification.objects.order_by('-calification').first()
+                print(bestRated.id)
+                if bestRated is None:
+                    return College_location.objects.none()
+                return College_location.objects.filter(id=bestRated.college_location.id)
+        else:
+            return College_location.objects.none()
