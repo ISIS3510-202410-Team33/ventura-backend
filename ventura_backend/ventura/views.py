@@ -10,10 +10,11 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from collections import defaultdict
 import string
+import requests
 
 # Descargar los recursos necesarios para NLTK
-nltk.download('punkt')
-nltk.download('stopwords')
+nltk.download("punkt")
+nltk.download("stopwords")
 
 # Credenciales de Firebase
 firebase_credentials = {
@@ -27,12 +28,12 @@ firebase_credentials = {
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-54br6%40ventura-bfe66.iam.gserviceaccount.com",
-    "universe_domain": "googleapis.com"
+    "universe_domain": "googleapis.com",
 }
 
 # Configurar las credenciales de Firebase
 cred = credentials.Certificate(firebase_credentials)
-firebase_admin.initialize_app(cred, {'storageBucket': 'gs://ventura-bfe66.appspot.com'})
+firebase_admin.initialize_app(cred, {"storageBucket": "gs://ventura-bfe66.appspot.com"})
 
 
 def health_check(request):
@@ -46,10 +47,12 @@ def health_check(request):
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    return render(request, "index.html")
+
 
 def get_data(request):
-    return render(request, 'get_data.html')
+    return render(request, "get_data.html")
+
 
 @csrf_exempt
 def download_top_3_edificios(request):
@@ -57,37 +60,41 @@ def download_top_3_edificios(request):
     def process_files(bucket):
         # Diccionario para almacenar los conteos por edificio
         conteos_por_edificio = {}
-        
+
         # Obtener la lista de objetos en el bucket
         blobs = bucket.list_blobs()
-        
+
         # Iterar sobre los objetos y procesar cada archivo
         for blob in blobs:
             # Obtener el nombre del archivo
             filename = blob.name
-            
+
             # Ignorar el archivo "edificios.json" y el archivo "calificaciones.json"
             if filename == "edificios.json" or filename == "calificaciones.json":
                 continue
-            
+
             # Descargar el archivo JSON
             blob_content = blob.download_as_string()
             json_data = json.loads(blob_content)
-            
+
             # Iterar sobre los conteos en el archivo JSON
             for edificio, conteo in json_data.items():
                 # Actualizar el conteo del edificio
-                conteos_por_edificio[edificio] = conteos_por_edificio.get(edificio, 0) + conteo
-        
+                conteos_por_edificio[edificio] = (
+                    conteos_por_edificio.get(edificio, 0) + conteo
+                )
+
         return conteos_por_edificio
 
     def top_3_edificios(conteos_por_edificio):
         # Ordenar los edificios por la cantidad de visitas (valores) en orden descendente
-        top_edificios = sorted(conteos_por_edificio.items(), key=lambda x: x[1], reverse=True)
-        
+        top_edificios = sorted(
+            conteos_por_edificio.items(), key=lambda x: x[1], reverse=True
+        )
+
         # Seleccionar los tres primeros edificios del top
         top_3_edificios = top_edificios[:3]
-        
+
         return top_3_edificios
 
     # Inicializar el cliente de almacenamiento de Firebase
@@ -97,22 +104,20 @@ def download_top_3_edificios(request):
     conteos_por_edificio = process_files(bucket)
     top_3 = top_3_edificios(conteos_por_edificio)
 
-    response_data = {
-        'conteos_por_edificio': conteos_por_edificio,
-        'top_3': top_3
-    }
-    
+    response_data = {"conteos_por_edificio": conteos_por_edificio, "top_3": top_3}
+
     # Generar el JSON de respuesta
     response_json = json.dumps(response_data)
-    
+
     # Crear una respuesta HTTP con el JSON y configurar el encabezado para descargar el archivo
-    response = JsonResponse(response_data, json_dumps_params={'indent': 2})
-    response['Content-Disposition'] = 'attachment; filename="top_3_edificios.json"'
-    
+    response = JsonResponse(response_data, json_dumps_params={"indent": 2})
+    response["Content-Disposition"] = 'attachment; filename="top_3_edificios.json"'
+
     return response
 
+
 def extract_keywords(reviews):
-    stop_words = set(stopwords.words('english'))
+    stop_words = set(stopwords.words("english"))
     punctuation = set(string.punctuation)
     word_freq = defaultdict(int)
 
@@ -127,8 +132,6 @@ def extract_keywords(reviews):
     return sorted_freq[:10]  # Obtener las 10 palabras más frecuentes
 
 
-
-
 @csrf_exempt
 def download_keywords_for_edificios(request):
     # Inicializar el cliente de almacenamiento de Firebase
@@ -141,19 +144,27 @@ def download_keywords_for_edificios(request):
 
     # Extraer las palabras clave para cada edificio
     keywords_por_edificio = {}
-    for edificio, data in json_data['spaces'].items():
-        reviews = data['calificaciones']  # Acceder a la lista de reseñas para el edificio actual
+    for edificio, data in json_data["spaces"].items():
+        reviews = data[
+            "calificaciones"
+        ]  # Acceder a la lista de reseñas para el edificio actual
         keywords = extract_keywords(reviews)
         keywords_por_edificio[edificio] = keywords
 
     # Generar el JSON de respuesta
-    response_data = {
-        'keywords_por_edificio': keywords_por_edificio
-    }
+    response_data = {"keywords_por_edificio": keywords_por_edificio}
     response_json = json.dumps(response_data)
 
     # Crear una respuesta HTTP con el JSON y configurar el encabezado para descargar el archivo
-    response = JsonResponse(response_data, json_dumps_params={'indent': 2})
-    response['Content-Disposition'] = 'attachment; filename="keywords_por_edificio.json"'
+    response = JsonResponse(response_data, json_dumps_params={"indent": 2})
+    response["Content-Disposition"] = (
+        'attachment; filename="keywords_por_edificio.json"'
+    )
 
     return response
+
+
+def building_ratings(request):
+    response = requests.get("http://localhost:8000/download_keywords_for_edificios/")
+    data = response.json()
+    return render(request, "building_ratings.html", {"data": data})

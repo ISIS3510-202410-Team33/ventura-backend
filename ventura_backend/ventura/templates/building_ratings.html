@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}Building Ratings Analytics{% endblock %}
+
+{% block content %}
+<h1>Building Ratings Analytics</h1>
+{% for building, keywords in data.keywords_por_edificio.items %}
+<div class="card">
+    <div class="card-header">
+        {{ building }}
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Most Common Words</h5>
+        <ul>
+            {% for word, frequency in keywords %}
+            <li>{{ word }}: {{ frequency }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
