@@ -223,7 +223,7 @@ class UserFrequencyLocationAnalysisViewSet(viewsets.ModelViewSet):
                 else:
                     mostVisited = User_frequency.objects.order_by('-frequency').first()
                     if mostVisited is not None:
-                        nameMostVisited = mostVisited.college_location.name
+                        nameMostVisited = mostVisited.college_location.name.split(' ')[0]
                 if nameMostVisited is None:
                     return College_location.objects.none()
                 print("Most visited location")
