@@ -5,16 +5,17 @@
 {% load static %}
 
 {% block content %}
-<div>
-    <h1>¡Welcome to the Ventura webpage!</h1>
-    <p>Ventura is an android mobile app to provide an interactive navigation through campus sites in some colleges of Bogotá, Colombia.</p>
+<div style="text-align: center; margin-top: 20px; margin-bottom: 60px;">
+    <h1>¡Welcome to the Ventura analytics webpage!</h1>
+    <p>Ventura is an android mobile app to provide an interactive navigation through campus sites in some colleges of
+        Bogotá, Colombia.</p>
 </div>
-<div style="display: flex; align-items: center;">
-    <div style="margin-left: 20px;">
+<div style="display: flex; justify-content: center; align-items: center; height: 60vh;">
+    <div style="margin-left: 20px; margin-right: 20px;">
         <img src="{% static 'images/goose.png' %}" alt="Ventura Goose Draw" width="212" height="400">
     </div>
     <div style="font-size: 50px; margin-left: 20px;">
-        ... goose goose?
+        Ventura is an interactive navigation app for campus sites in Bogotá, Colombia.
     </div>
 </div>
 {% endblock %}
