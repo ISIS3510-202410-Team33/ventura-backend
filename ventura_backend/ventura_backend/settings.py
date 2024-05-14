@@ -83,11 +83,11 @@ WSGI_APPLICATION = "ventura_backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "ventura_db",
-        "USER": "admin",
-        "PASSWORD": "pvtytYya7ielWxgXfUOoC0HgPicGAsfF",
-        "HOST": "dpg-codh4l8l5elc73fo4220-a.oregon-postgres.render.com",
-        "PORT": "5432",
+        "NAME": os.environ.get("DATABASE_NAME"),
+        "USER": os.environ.get("DATABASE_USER"),
+        "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
+        "HOST": os.environ.get("DATABASE_HOST"),
+        "PORT": os.environ.get("DATABASE_PORT"),
     }
 }
 
