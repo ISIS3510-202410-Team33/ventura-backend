@@ -4,3 +4,4 @@ psycopg2-binary
 django-bootstrap5
 firebase-admin
 nltk
+Pillow

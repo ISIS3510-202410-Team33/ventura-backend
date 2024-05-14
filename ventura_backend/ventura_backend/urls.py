@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
-from ventura import views 
+from ventura import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +28,6 @@ urlpatterns = [
     path('get_data/', views.get_data, name='get_data'),
     path('api/', include('ventura.api.urls')),
     path('download_top_3_edificios/', views.download_top_3_edificios, name='download_top_3_edificios'),
-    path('download_keywords_for_edificios/', views.download_keywords_for_edificios, name='download_keywords_for_edificios')
-]
+    path('download_keywords_for_edificios/', views.download_keywords_for_edificios, name='download_keywords_for_edificios'),
+    path('hprouting/', include('hprouting.urls'))
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
