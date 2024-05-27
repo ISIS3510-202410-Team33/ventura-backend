@@ -6,3 +6,4 @@ firebase-admin
 nltk
 Pillow
 python-dotenv
+sslserver
