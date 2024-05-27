@@ -5,3 +5,4 @@ django-bootstrap5
 firebase-admin
 nltk
 Pillow
+python-dotenv

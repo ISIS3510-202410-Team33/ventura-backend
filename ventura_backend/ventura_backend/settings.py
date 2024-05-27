@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "ventura",
-    "hprouting"
+    "hprouting",
+    "sslserver"
 ]
 
 MIDDLEWARE = [
@@ -83,11 +84,11 @@ WSGI_APPLICATION = "ventura_backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DATABASE_NAME"),
-        "USER": os.environ.get("DATABASE_USER"),
-        "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
-        "HOST": os.environ.get("DATABASE_HOST"),
-        "PORT": os.environ.get("DATABASE_PORT"),
+        "NAME": "ventura_db",
+        "USER": "admin",
+        "PASSWORD": "pvtytYya7ielWxgXfUOoC0HgPicGAsfF",
+        "HOST": "dpg-codh4l8l5elc73fo4220-a.oregon-postgres.render.com",
+        "PORT": "5432",
     }
 }
 
@@ -141,3 +142,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = "/media/"
 
 UNIVERSITY_GRAPH_CACHE_TIMEOUT = 60 * 60 * 6
+
+# Configuración de SSL_CERTIFICATE y SSL_KEY
+# SSL_CERTIFICATE = os.path.join(BASE_DIR, 'certs', 'server.crt')
+# SSL_KEY = os.path.join(BASE_DIR, 'certs', 'server.key')
