@@ -7,3 +7,4 @@ nltk
 Pillow
 python-dotenv
 django-sslserver
+django-sslserver
